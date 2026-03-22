@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Private Journal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            color: #000; /* standard black text */
+            background-color: #fff; /* white background */
+        }
+
+        input, button {
+            padding: 5px 10px;
+            margin: 5px 0;
+            font-size: 1em;
+        }
+
+        #journal {
+            display: none;
+            max-width: 700px;
+            margin: auto;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        #step2 {
+            display: none;
+        }
+
+        /* Tighter spacing for diary */
+        #journal h2 {
+            font-weight: bold;
+            margin: 10px 0 5px; /* top 10px, bottom 5px */
+        }
+
+        #journal p {
+            margin: 0 0 15px; /* smaller spacing between paragraphs */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Step 1 -->
+    <div id="step1">
+        <h2>Protected Access</h2>
+        <p>Enter password:</p>
+
+        <input type="password" id="password1">
+        <button onclick="checkStep1()">Submit</button>
+
+        <p id="message1" style="color:red;"></p>
+    </div>
+
+    <!-- Step 2 -->
+    <div id="step2">
+        <h2>Security Question</h2>
+        <p>Favourite flower:</p>
+
+        <input type="password" id="password2">
+        <button onclick="checkStep2()">Submit</button>
+
+        <p id="message2" style="color:red;"></p>
+    </div>
+
+    <!-- Journal -->
+    <div id="journal">
+        <h2>Diary</h2>
+
+        <h2>29th of September</h2>
+        <p>This is the usual job, I shouldn't feel bad about it. It was easy to get close to his friend, and I'll surely get close to him as well. I have to: I still need to dig for more.</p>
+
+        <h2>30th of September</h2>
+        <p>I think he's a genuinely good person. I'm enjoying the mission, but not in the way I was expecting. I feel guilty, but I already received the paycheck. This is unlike me.</p>
+
+        <h2>6th of October</h2>
+        <p>Something shifted. I was supposed to stay at a safe distance, at least emotionally. Just gather facts, evidence. This was never part of the plan. I really want to stay around... but tomorrow will be the last time I'll see him. See them both.</p>
+    </div>
+
+    <script>
+        function checkStep1() {
+            const pass1 = document.getElementById("password1").value;
+
+            if (pass1 === "miloisabella410") {
+                document.getElementById("step1").style.display = "none";
+                document.getElementById("step2").style.display = "block";
+            } else {
+                document.getElementById("message1").textContent = "Incorrect password";
+            }
+        }
+
+        function checkStep2() {
+            const pass2 = document.getElementById("password2").value;
+
+            if (pass2.toLowerCase() === "daisy") {
+                document.getElementById("step2").style.display = "none";
+                document.getElementById("journal").style.display = "block";
+            } else {
+                document.getElementById("message2").textContent = "Incorrect answer";
+            }
+        }
+    </script>
+
+</body>
+</html>
