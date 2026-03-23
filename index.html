@@ -55,8 +55,9 @@
         border: none;
         background: none;
         cursor: pointer;
-        color: #555;
-        font-size: 1.1em;
+        color: #007bff;  /* visible blue */
+        font-size: 1.2em;
+        z-index: 2;
     }
 
     button.submit-btn {
@@ -214,7 +215,7 @@ function togglePassword(id, btn) {
     }
 }
 
-// Ensure step2 is hidden on load
+// Hide step2 on load
 document.getElementById('step2').style.display = 'none';
 </script>
 
