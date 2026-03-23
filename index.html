@@ -4,10 +4,6 @@
 <meta charset="UTF-8">
 <title>Private Journal</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Font Awesome for eye icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-u+4XHdYoyQYKz7yqI0w0x7ymF8yKzJz7IoCe8uU38Gh5U0EvPC87P2+1i1YNc0rRb6yk7BBw2Jmr0Wj5RyhHqA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,10 +14,7 @@
         text-align: center;
     }
 
-    h2 {
-        margin-bottom: 10px;
-        color: #222;
-    }
+    h2 { margin-bottom: 10px; color: #222; }
 
     .container {
         max-width: 400px;
@@ -55,12 +48,18 @@
         border: none;
         background: none;
         cursor: pointer;
-        color: #007bff;  /* visible blue */
-        font-size: 1.2em;
-        z-index: 2;
+        width: 24px;
+        height: 24px;
+        padding: 0;
     }
 
-    button.submit-btn {
+    .toggle-eye svg {
+        width: 100%;
+        height: 100%;
+        fill: #555;
+    }
+
+    button.submit-btn, .entry-btn {
         width: 100%;
         padding: 10px;
         border-radius: 5px;
@@ -70,17 +69,14 @@
         font-size: 1em;
         cursor: pointer;
         transition: 0.2s;
+        margin-top: 5px;
     }
 
-    button.submit-btn:hover {
+    button.submit-btn:hover, .entry-btn:hover {
         background-color: #0056b3;
     }
 
-    .error-message {
-        color: red;
-        font-size: 0.9em;
-        margin-top: 5px;
-    }
+    .error-message { color: red; font-size: 0.9em; margin-top: 5px; }
 
     /* Diary styles */
     #journal {
@@ -91,7 +87,29 @@
         padding: 0 10px;
     }
 
+    .diary-navigation {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .diary-navigation button {
+        margin: 5px;
+        padding: 8px 12px;
+        font-size: 0.95em;
+        border-radius: 5px;
+        border: none;
+        background-color: #17a2b8;
+        color: white;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .diary-navigation button:hover {
+        background-color: #117a8b;
+    }
+
     .diary-entry {
+        display: none;
         background-color: #fff;
         margin-bottom: 20px;
         padding: 20px;
@@ -105,28 +123,14 @@
         color: #007bff;
     }
 
-    .diary-entry p {
-        margin: 10px 0 0 0;
-        line-height: 1.6;
-        color: #555;
-    }
+    .diary-entry p { margin: 10px 0 0 0; line-height: 1.6; color: #555; }
 
     @media (max-width: 500px) {
-        .container {
-            margin: 40px auto;
-            padding: 15px;
-        }
-        input[type="password"], input[type="text"] {
-            padding: 10px 35px 10px 10px;
-            font-size: 0.95em;
-        }
-        button.submit-btn {
-            padding: 8px;
-            font-size: 0.95em;
-        }
-        .diary-entry {
-            padding: 15px;
-        }
+        .container { margin: 40px auto; padding: 15px; }
+        input[type="password"], input[type="text"] { padding: 10px 35px 10px 10px; font-size: 0.95em; }
+        button.submit-btn { padding: 8px; font-size: 0.95em; }
+        .diary-entry { padding: 15px; }
+        .diary-navigation button { padding: 6px 10px; font-size: 0.85em; }
     }
 </style>
 </head>
@@ -140,7 +144,11 @@
     <div class="password-container">
         <input type="password" id="password1" placeholder="Enter password">
         <button class="toggle-eye" onclick="togglePassword('password1', this)">
-            <i class="fa-solid fa-eye"></i>
+            <!-- Open eye -->
+            <svg viewBox="0 0 24 24" class="eye-open">
+                <path d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                <circle cx="12" cy="12" r="2.5"/>
+            </svg>
         </button>
     </div>
     <button class="submit-btn" onclick="checkStep1()">Submit</button>
@@ -155,7 +163,11 @@
     <div class="password-container">
         <input type="password" id="password2" placeholder="Enter answer">
         <button class="toggle-eye" onclick="togglePassword('password2', this)">
-            <i class="fa-solid fa-eye"></i>
+            <!-- Open eye -->
+            <svg viewBox="0 0 24 24" class="eye-open">
+                <path d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/>
+                <circle cx="12" cy="12" r="2.5"/>
+            </svg>
         </button>
     </div>
     <button class="submit-btn" onclick="checkStep2()">Submit</button>
@@ -166,17 +178,25 @@
 <div id="journal">
     <h2 style="text-align:center; margin-bottom:30px;">Diary Entries</h2>
 
-    <div class="diary-entry">
+    <!-- Navigation Buttons -->
+    <div class="diary-navigation">
+        <button onclick="showEntry('entry1')">29th Sep</button>
+        <button onclick="showEntry('entry2')">30th Sep</button>
+        <button onclick="showEntry('entry3')">6th Oct</button>
+    </div>
+
+    <!-- Diary Entries -->
+    <div class="diary-entry" id="entry1">
         <h3>29th of September</h3>
         <p>This is the usual job, I shouldn't feel bad about it. It was easy to get close to his friend, and I'll surely get close to him as well. I have to: I still need to dig for more.</p>
     </div>
 
-    <div class="diary-entry">
+    <div class="diary-entry" id="entry2">
         <h3>30th of September</h3>
         <p>I think he's a genuinely good person. I'm enjoying the mission, but not in the way I was expecting. I feel guilty, but I already received the paycheck. This is unlike me.</p>
     </div>
 
-    <div class="diary-entry">
+    <div class="diary-entry" id="entry3">
         <h3>6th of October</h3>
         <p>Something shifted. I was supposed to stay at a safe distance, at least emotionally. Just gather facts, evidence. This was never part of the plan. I really want to stay around... but tomorrow will be the last time I'll see him. See them both.</p>
     </div>
@@ -198,6 +218,7 @@ function checkStep2() {
     if (pass2.toLowerCase() === "daisy") {
         document.getElementById("step2").style.display = "none";
         document.getElementById("journal").style.display = "block";
+        // no entry is shown initially
     } else {
         document.getElementById("message2").textContent = "Incorrect answer";
     }
@@ -205,14 +226,23 @@ function checkStep2() {
 
 function togglePassword(id, btn) {
     const input = document.getElementById(id);
-    const icon = btn.querySelector('i');
+    const svg = btn.querySelector('svg');
     if (input.type === "password") {
         input.type = "text";
-        icon.className = "fa-solid fa-eye-slash";
+        // closed eye icon
+        svg.innerHTML = `<path d="M1 12c1.73-3.89 6-7 11-7s9.27 3.11 11 7c-1.73 3.89-6 7-11 7s-9.27-3.11-11-7zm11-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/>`;
     } else {
         input.type = "password";
-        icon.className = "fa-solid fa-eye";
+        // open eye icon
+        svg.innerHTML = `<path d="M12 5C7 5 2.73 8.11 1 12c1.73 3.89 6 7 11 7s9.27-3.11 11-7c-1.73-3.89-6-7-11-7zm0 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/><circle cx="12" cy="12" r="2.5"/>`;
     }
+}
+
+// Show only the clicked diary entry
+function showEntry(id) {
+    const entries = document.querySelectorAll('.diary-entry');
+    entries.forEach(e => e.style.display = 'none');
+    document.getElementById(id).style.display = 'block';
 }
 
 // Hide step2 on load
